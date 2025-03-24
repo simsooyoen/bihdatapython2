@@ -1,25 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 
-# 멜론 주간 차트 URL
-url = 'https://www.melon.com/chart/week/index.htm'
+url = 'https://ticket.melon.com/concert/index.htm?genreType=GENRE_ART'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
 
-# User-Agent 설정하여 요청
-headers = {'User-Agent': 'Mozilla/5.0'}
-response = requests.get(url, headers=headers)
+rankings = soup.select('.some_css_class')  # 실제 CSS 클래스명으로 변경해야 함
 
-# HTML 소스 가져오기
-html = response.text
-
-# BeautifulSoup을 통한 HTML 파싱
-soup = BeautifulSoup(html, 'html.parser')
-
-# 음악 정보 추출
-songs = soup.select('tr[data-song-no]')
-for song in songs:
-    rank = song.select_one('span.rank').text.strip()  # 순위
-    title = song.select_one('div.ellipsis.rank01 a').text.strip()  # 곡 제목
-    artist = song.select_one('div.ellipsis.rank02 a').text.strip()  # 가수
-    album = song.select_one('div.ellipsis.rank03 a').text.strip()  # 앨범
-
-    print(f'순위: {rank}, 곡 제목: {title}, 아티스트: {artist}, 앨범: {album}')
+for ranking in rankings:
+    title = ranking.select_one('.title_css_class').get_text()  # 제목 CSS 클래스명을 사용
+    artist = ranking.select_one('.artist_css_class').get_text()  # 아티스트 CSS 클래스명을 사용
+    print(f'제목: {title}, 아티스트: {artist}')

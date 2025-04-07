@@ -1,6 +1,3 @@
-import random
-import time
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -27,11 +24,3 @@ for song in songs:
     artist = song.select_one('.ellipsis.rank02 a').text  # 아티스트 이름
     album = song.select_one('.ellipsis.rank03 a').text  # 앨범 이름
     print(f'곡명: {title}, 아티스트: {artist}, 앨범: {album}')
-
-# 수집한 데이터를 출력합니다.
-for song in songs:
-    print(f"{son[0]}, {song[1]} - {song[2]}")
-
-# 멜론 차트 100 주에서 노래 한곡 추천 해주는 서비스 만들기
-ai_song = random.choice(songs)
-print(f"추천곡은 {ai_song[1]} - {ai_song[2]}입니다.")
